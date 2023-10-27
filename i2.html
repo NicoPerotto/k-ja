@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style> 
+#myDIV {
+  border: 1px solid black;
+  width: 300px;
+  height: 300px;
+}
+</style>
+</head>
+<body>
+
+<p>Click the "Try it" button to set the borderRadius property of the DIV element:</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<div id="myDIV">
+  <h1>Hello</h1>
+</div>
+
+<script>
+  Array.prototype.filtrar = function (cb1) {
+	let nuevoArr = [];
+	for (let i = 0; i < this.length; i ++){
+      if (cb1(this[i])) {
+        nuevoArr.push(this[i]);
+      }
+    }
+	return  nuevoArr;
+  }
+
+//Así esta mas estandarizada   
+ Array.prototype.filtrar = function (cb1) {
+	let nuevoArr = [];
+	for(let elem of this){ 
+      if (cb1(elem)) {
+        nuevoArr.push(elem);
+      }
+    }
+	return  nuevoArr;
+  }
+var productos = [{
+	 price: 100,
+     name: 'tv'
+   }, {
+     price: 50,
+     name: 'phone'
+   }, {
+     price: 30,
+     name: 'lamp'
+   }];
+   console.log( productos.filtrar(function(p) { return p.price >= 50;}));
+  // })
+</script>
+
+</body>
+</html>

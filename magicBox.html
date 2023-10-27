@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+		<link href="css/app.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+
+	</body>
+							<script src="./js/addons.js"></script>
+							<script src="./js/constants.js"></script>
+							<script src="./js/mbox.js"></script>
+	<script>
+	conteiner.relacion(3);
+	conteiner.centrar();
+
+caja0 = new caja();
+caja0.posicion(10,10);
+caja0.cambiar_lados(30,30);
+caja0b = new caja();
+caja0b.poner_dentro(caja0);
+caja0b.relacion(0);
+caja0b.cambiar_lados(50,50);
+caja0b.colocar_texto("0");
+
+
+caja1 = new caja();
+caja1.posicion(0,50);
+caja1.cambiar_lados(50,30);
+caja1b = new caja();
+caja1b.poner_dentro(caja1);
+caja1b.relacion(1);
+caja1b.cambiar_lados(50,50);
+caja1b.colocar_texto("1");
+
+caja2 = new caja();
+caja2.posicion(50,10);
+caja2.cambiar_lados(50,30);
+caja2b = new caja();
+caja2b.poner_dentro(caja2);
+caja2b.relacion(2);
+caja2b.cambiar_lados(50,50);
+caja2b.colocar_texto("2");
+
+caja3 = new caja();
+caja3.posicion(50,50);
+caja3.cambiar_lados(50,30);
+caja3b = new caja();
+caja3b.poner_dentro(caja3);
+caja3b.relacion(3);
+caja3b.cambiar_lados(50,50);
+caja3b.colocar_texto("3");	
+
+
+	</script>
+</html>

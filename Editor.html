@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Editor</title>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/theme/eclipse.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js"></script>
+	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+	<link href="css/editor.css" rel="stylesheet" type="text/css"></link>
+
+  </head>
+  <body>
+	<div class="menuButtonsSpace">
+		<ul>
+		  <li class="dropdown">
+			<a href="#" class="dropbtn">Archivo</a>
+			<div class="dropdown-content">
+				<a  href="#" id="saveProyect" onclick="saveProyect()">Guardar Proyecto</a>
+				<a  href="#" id="saveModule" onclick="saveModule()">Guardar Pestaña</a>
+				<a  href="#" id="loadProyect" onclick="loadProyect()">Abrir Proyecto</a>
+				<a  href="#" id="loadModule" onclick="loadModule()">Importar Pestaña</a>
+			</div>
+		  </li>
+		  <li class="dropdown">
+			<a href="#" class="dropbtn">Edición</a>
+			<div class="dropdown-content">
+				<a  href="#" id="build" onclick="build()">Unir Pestañas</a>
+			</div>
+		  </li>
+		  
+		  <li class="dropdown">
+			<a href="#" class="dropbtn">Ejecutar</a>
+			<div class="dropdown-content">
+				<a  href="#" id="build" onclick="build()">Crear Web</a>
+				<a  href="#" id="build" onclick="render()">Renderizar</a>
+			</div>
+		  </li>
+		  <li class="dropdown">
+			<a href="#" class="dropbtn">Ventana</a>
+			<div class="dropdown-content">
+				<a  href="#" id="build" onclick="ShowAreaChange('R1A1');run();">Cuadrado 1:1</a>
+				<a  href="#" id="build" onclick="ShowAreaChange('R3A4');run();">Pantalla 3:4</a>
+				<a  href="#" id="build" onclick="ShowAreaChange('R16A9');run();">Horizontal 16:9</a>
+				<a  href="#" id="build" onclick="ShowAreaChange('R9A16');run();">Vertical 9:16</a>
+			</div>
+		  </li>
+		  <li><a  href="#" id="run" onclick="run()">Probar</a></li>
+		  <li><a class="active" href="#home">Ayuda</a></li>
+		</ul>
+	</div>
+	<div id="cBSpace" class="codeButtonsSpace">
+
+	</div>
+	<div id="eSelectionArea" class="editionSelectionArea ">	</div>
+	<div id="writeCodeDiv" class="editionArea">
+		 <textarea id="code" style="overflow:hidden"></textarea>
+	</div>
+
+	<!--
+	<textarea class="editionArea backEA" id="writeCode" oninput="saveCode();rewriteRitchCode();" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}">
+	</textarea>
+-->
+	<div id="showArea" class="showArea R1A1">
+		<iframe id="resultCode" allow-same-origin></iframe>
+	</div>
+	<script src="./js/addons.js"></script>
+	<script src="./js/kjaOpt.js"></script>
+	<script src="./js/tabs.js"></script>
+	<script src="./js/saveload.js"></script>
+	<script src="./js/colors.js"></script>
+
+	<script src="./js/jszip.min.js"></script>
+	<script src="./js/FileSaver.min.js"></script>
+	
+	<script>
+		let selTab = 0;
+		let nameBase = "SinNombre";
+		let msjBase = "/*Escribe tu código aquí ó usa las botoneras para que la magia comience*/";
+		codeSource = new Array();
+		codeSource.push([nameBase , msjBase]);
+		showTab();
+		createSelection(kjaOpt);
+
+		function htmlAppSource(){
+		
+			let template_string = `<!DOCTYPE html>
+						<html>
+							<head>
+								<title>K-JA application<\/title>
+								
+							<\/head>
+							<body>
+								<div id="error"><\/div>
+							<\/body>
+							<script src="./js/addons.js"><\/script>
+							<script src="./js/constants.js"><\/script>
+							<script src="./js/mbox.js"><\/script>
+							<script> try{{{appSource}}}catch(e){alert(e);};	<\/script>	
+						<\/html>`;
+		
+		
+			let appSource="";
+			if (codeSource.length > 0){
+				for (let i = 0; i < codeSource.length; i++) {
+					appSource += codeSource[i][1].split("\n").join("");
+				}
+			}
+			return template_string.replace('{{appSource}}', appSource);	
+		}
+		
+		function run(){
+			saveCode();
+			let html_string = htmlAppSource();
+			let iframeElement = document.getElementById("resultCode");
+			iframeElement.src = "about:blank";
+			iframeElement.contentWindow.document.open();
+			iframeElement.contentWindow.document.write(html_string);
+			iframeElement.contentWindow.document.close();
+		}
+
+		function saveProyect(){
+			saveCode();
+			let appSource = JSON.stringify({type:"Proyecto",appSource:codeSource});
+			save(appSource, "proyecto");
+		}
+
+		function saveModule(){
+			saveCode();
+			let appSource = JSON.stringify({type:"Modulo",appSource:codeSource[selTab]});
+			save(appSource, "módulo");
+		}
+		
+		function loadModule(){
+			var inputOpt = document.createElement("input");
+			inputOpt.type = "file";
+			document.body.appendChild(inputOpt);
+			inputOpt.style.display = 'none';
+			inputOpt.addEventListener("change", function() {
+				load(inputOpt.files[0],"Modulo");
+				inputOpt.parentNode.removeChild(inputOpt);
+			});
+			inputOpt.click() 
+		}
+		
+		function loadProyect(){
+			var inputOpt = document.createElement("input");
+			inputOpt.type = "file";
+			document.body.appendChild(inputOpt);
+			inputOpt.style.display = 'none';
+			inputOpt.addEventListener("change", function() {
+				load(inputOpt.files[0],"Proyecto");
+				inputOpt.parentNode.removeChild(inputOpt);
+			});
+			inputOpt.click() 
+		}
+		
+	function build(){
+		const baseUrl = "https://arcadeuz.github.io/k-ja/";
+		let files = [
+			"css/app.css",
+			"js/addons.js",
+			"js/mbox.js",
+			"js/constants.js"
+		];
+		let contents = {};
+
+		Promise.all(files.map(file =>
+			fetch(baseUrl + file)
+			.then(response => response.text())
+			.then(content => contents[file] = content)
+		))
+		.then(() => {
+			// Crear el archivo zip
+			var zip = new JSZip();
+			files.forEach(file => {
+				var folder = file.split('/')[0];
+				var fileName = file.split('/').pop();
+				var folderZip = zip.folder(folder);
+				folderZip.file(fileName, contents[file]);
+			});
+			// Añadir el archivo HTML generado dinámicamente
+			zip.file("app.html", htmlAppSource());
+			// Descargar el archivo zip
+			zip.generateAsync({type:"blob"})
+			.then(function(content) {
+				saveAs(content, "archivo.zip");
+			});
+		});
+	}
+	
+	function render() {
+	  const iframe = document.getElementById('resultCode');
+	  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+	  const element = iframeDoc.getElementById('contenedor'); // Reemplaza "contenedor" con el ID de tu elemento dentro del iframe
+	  html2canvas(element).then(function(canvas) {
+		const downloadLink = document.createElement('a');
+		downloadLink.href = canvas.toDataURL('image/png');
+		downloadLink.download = 'screenshot.png';
+		downloadLink.click();
+	  });
+	}
+
+	function ShowAreaChange(rel){
+		document.getElementById('showArea').className = "showArea "+rel;
+	}
+
+	</script>
+  </body>
+</html>
