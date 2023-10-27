@@ -1,0 +1,211 @@
+.method{
+	color:Green;
+}
+.boxs{
+	color:Blue;
+}
+.text{
+	color:Grey;
+}
+
+.nums{
+	color:Pink;
+}
+
+.coms{
+	color:Teal;
+}
+.func{
+	background-color:LightCyan;
+}
+
+
+.menuButtonsSpace{
+	width:99vw;
+	height:3.5vh;
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+	height:100%;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding-top: 5%;
+	font-size: calc(95%);
+	padding-bottom: 10%;	
+	padding-left: 16px;
+	padding-right: 16px;
+    text-decoration: none;
+
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index:10;
+	top: 3vh;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+	z-index:11;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.codeButtonsSpace{
+	width:99vw;
+	height:4.5vh;
+	margin-top:1vh;
+}
+
+.codeButton{
+	width:calc((100vw - 100vh)/5.1);
+	height:2.5vh;
+	margin-top:0.5vh;
+}
+
+.editionArea{
+	width:calc(100vw - 100vh);
+	height:85vh ;
+	position:absolute;
+	top:13vh;
+	left:0vw;
+	background-color:transparent;
+	border:1px solid black;
+	font-family: Arial;
+	font-size:calc(2vh);
+	overflow: hidden;
+}
+
+.backEA{
+	color: transparent;
+	caret-color: blue;
+}
+
+
+.editionSelectionArea{
+	width:calc(100vw - 100vh);
+	height:3vh;
+	position:absolute;
+	display: flex;
+	flex-direction: row;
+	top:10vh;
+	left:0vw;
+}
+
+.editionTab{
+	width: 5vw;
+	height:3vh;
+	font-size: calc(2vh);
+	float: left;
+    position: relative;
+	top:0%;
+	overflow:hidden;
+	background-color: Silver;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	
+}
+
+.tabSelected{
+	top:-0.5vh !important;
+	height:3.5vh !important;
+	background-color: white !important;
+}
+
+.closeEditionTab{
+	width: 1vw;
+	height:3vh;
+	font-size: calc(1.5vh);
+	text-align:right;
+	color:red;
+	top:0%;
+	float: left;
+    position: relative;
+	background-color: Silver;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+}
+
+.addEditionTab{
+	width: 1vw;
+	height:3vh;
+	font-size: calc(3vh);
+	text-align:center;
+	top:0%;
+	float: left;
+    position: relative;
+	background-color: white;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+}
+
+.showArea{
+	position:absolute;
+}
+
+.R1A1{
+	width:90vh;
+	height:90vh;
+	top:8vh;
+	left:calc(100vw - 95vh);
+}
+
+.R3A4{
+	width:90vh;
+	height:67.5vh;
+	top:19vh;
+	left:calc(100vw - 95vh);
+}
+
+.R16A9{
+	width:90vh;
+	height:50.7vh;
+	top:28vh;
+	left:calc(100vw - 95vh);
+}
+
+.R9A16{
+	width:50.7vh;
+	height:90vh;
+	top:8vh;
+	left:calc(100vw - 78vh);
+}
+
+iframe{
+	width:100%;
+	height:100%
+}
